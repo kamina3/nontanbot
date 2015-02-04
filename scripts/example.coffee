@@ -7,16 +7,30 @@
 #   Uncomment the ones you want to try and experiment with.
 #
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
+tumblr = require "tumblrbot"
+SOURCES = {
+  "kamina3.tumblr.com"
+}
+
+getGif = (blog, msg) ->
+  tumblr.photos(blog).random (post) ->
+    msg.send post.photos[0].original_size.url
 
 module.exports = (robot) ->
 
-  robot.hear /@nontan/, (msg) ->
+  robot.hear /のんたん/, (msg) ->
     msg.send msg.random [
         "ウチのスピリチュアルパワーをあなたに注入♪",
         "特別練習してみーひん？",
         "やきにくたべたい",
-        "手伝いついでに運勢も占ったげようか？"        
+        "手伝いついでに運勢も占ったげようか？",        
+        "おつかれー！しっかりやすむんよ？",
+        "ウチの趣味は占いなんよ。占ってあげよか？"
     ]
+
+  robot.respond /tumblr/i, (msg) ->
+    blog = msg.random Object.keys(SOURCES)
+    getGif blog, msg
   # robot.hear /badger/i, (msg) ->
   #   msg.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
   #

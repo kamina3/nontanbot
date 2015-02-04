@@ -10,6 +10,13 @@
 
 module.exports = (robot) ->
 
+  robot.hear /@nontan/, (msg) ->
+    msg.send msg.random [
+        "ウチのスピリチュアルパワーをあなたに注入♪",
+        "特別練習してみーひん？",
+        "やきにくたべたい",
+        "手伝いついでに運勢も占ったげようか？"        
+    ]
   # robot.hear /badger/i, (msg) ->
   #   msg.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
   #

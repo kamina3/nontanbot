@@ -17,9 +17,12 @@ module.exports = function(robot) {
   robot.hear(/のんたん/, function(msg) {
     return msg.send(msg.random(["ウチのスピリチュアルパワーをあなたに注入♪", "特別練習してみーひん？", "やきにくたべたい", "手伝いついでに運勢も占ったげようか？", "おつかれー！しっかりやすむんよ？", "ウチの趣味は占いなんよ。占ってあげよか？"]));
   });
-  return robot.respond(/tumblr/i, function(msg) {
+  robot.respond(/tumblr/i, function(msg) {
     var blog;
     blog = msg.random(Object.keys(SOURCES));
     return getGif(blog, msg);
+  });
+  return robot.hear(/push/, function(msg) {
+    return msg.send(msg.random(["@kamina 新しいコミットが来たみたいやよ？", "@kamina 新着コミットきたんよー みてみーひん？", "@kamina あっぷでーとやで！ちぇっくしてみよ？"]));
   });
 };

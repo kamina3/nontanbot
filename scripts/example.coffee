@@ -31,6 +31,13 @@ module.exports = (robot) ->
   robot.respond /tumblr/i, (msg) ->
     blog = msg.random Object.keys(SOURCES)
     getGif blog, msg
+
+  robot.hear /push/, (msg) ->
+    msg.send msg.random [
+      "@kamina 新しいコミットが来たみたいやよ？",
+      "@kamina 新着コミットきたんよー みてみーひん？",
+      "@kamina あっぷでーとやで！ちぇっくしてみよ？"
+    ]
   # robot.hear /badger/i, (msg) ->
   #   msg.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
   #

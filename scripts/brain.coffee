@@ -4,7 +4,7 @@ module.exports = (robot) ->
     key = msg.match[1].trim()
     value = msg.match[2].trim()
     robot.brain.set key, value
-    msg.reply "「#{key}」は「#{value}」やね"
+    msg.reply "「#{key}」は「 #{value} 」やね"
 
   robot.hear /^のんたんおしえて\s+(.*)$/i, (msg) ->
     key = msg.match[1].trim()

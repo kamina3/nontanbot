@@ -32,6 +32,20 @@ module.exports = (robot) ->
     getGif blog, msg
 
 
+  robot.hear /今日の運勢/i, (msg) ->
+    fortunes = [
+      '大吉',
+      '中吉',
+      '小吉',
+      '吉',
+      '末吉',
+      '凶',
+      '大凶'
+    ]
+    res = fortunes[Math.floor(Math.random()*7)]
+    msg.send "あなたの今日の運勢は「#{res}」や♪ 今日も1日頑張ろ？"
+
+
   # robot.hear /badger/i, (msg) ->
   #   msg.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
   #

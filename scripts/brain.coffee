@@ -10,7 +10,15 @@ module.exports = (robot) ->
     key = msg.match[1].trim()
     value = robot.brain.get(key) or null
     if value != null
-      msg.reply "これやろ？\n#{value}"
+      msg.reply "「#{key}」はこれやろ？\n#{value}"
     else
       msg.reply "それは知らんみたい... ごめんね。"
+
+  robot.hear /^(.*)\s+とは$/, (msg) ->
+    key = msg.match[1].trim()
+    value = robot.brain.get(key) or null
+    if value != null
+      msg.reply "あ、それウチ知ってるよ。「#{key}」は「#{value}」やんな？"
+    else
+      msg.reply "うーん、聞いたことないなー"
   

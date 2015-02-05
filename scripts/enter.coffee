@@ -2,7 +2,7 @@
 module.exports = (robot) ->
   robot.enter (msg) ->
     msg.message.user.name
-    msg.send "おはよう #{msg.message.user.name}さん♪"
+    msg.send "いらっしゃい #{msg.message.user.name}さん♪"
 
   robot.leave (msg) ->
-    msg.send "@#{msg.message.user.name} 今日も一日お疲れ様やんな♪"
+    msg.send "@#{msg.message.user.name} お疲れ様やんな♪"

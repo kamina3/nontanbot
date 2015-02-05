@@ -18,11 +18,10 @@ getGif = (blog, msg) ->
 
 module.exports = (robot) ->
 
-  robot.hear /のんたん/, (msg) ->
+  robot.hear /のんたん$/, (msg) ->
     msg.send msg.random [
         "ウチのスピリチュアルパワーをあなたに注入♪",
-        "特別練習してみーひん？",
-        "やきにくたべたい",
+        "ウチのこと呼んだ？",
         "手伝いついでに運勢も占ったげようか？",        
         "おつかれー！しっかりやすむんよ？",
         "ウチの趣味は占いなんよ。占ってあげよか？"
@@ -32,12 +31,7 @@ module.exports = (robot) ->
     blog = msg.random Object.keys(SOURCES)
     getGif blog, msg
 
-  robot.hear /push/, (msg) ->
-    msg.send msg.random [
-      "@kamina 新しいコミットが来たみたいやよ？",
-      "@kamina 新着コミットきたんよー みてみーひん？",
-      "@kamina あっぷでーとやで！ちぇっくしてみよ？"
-    ]
+
   # robot.hear /badger/i, (msg) ->
   #   msg.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
   #

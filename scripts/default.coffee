@@ -40,7 +40,7 @@ sendGoodNight = (msg) ->
 
 module.exports = (robot) ->
 
-  robot.hear /のんたん/, (msg) ->
+  robot.hear /^のんた.*ん\.*$/, (msg) ->
     msg.send msg.random [
         "ウチのスピリチュアルパワーをあなたに注入♪",
         "ウチのこと呼んだ？",

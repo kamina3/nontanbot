@@ -17,7 +17,7 @@ getGif = (blog, msg) ->
     msg.send post.photos[0].original_size.url
 
 sendGoodJop = (msg) ->
-  msg.send msg.random [
+  msg.reply msg.random [
     "おつかれー！しっかりやすむんよ？",
     "今日も一日お疲れ様でした♪",
     "大丈夫？やすも？",

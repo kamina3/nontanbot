@@ -16,20 +16,50 @@ getGif = (blog, msg) ->
   tumblr.photos(blog).random (post) ->
     msg.send post.photos[0].original_size.url
 
+sendGoodJop = (msg) ->
+  msg.send msg.random [
+    "おつかれー！しっかりやすむんよ？",
+    "今日も一日お疲れ様でした♪",
+    "大丈夫？やすも？",
+    "おつかれさま♪"
+  ]
+
+sendGreeting = (msg) -> 
+  msg.reply msg.random [
+    "おはよ！",
+    "おはよ〜　今日もいい天気になるといいね",
+    "おはよ〜"
+  ]
+
+sendGoodNight = (msg) ->
+  msg.reply msg.random [
+    "おやすみ！",
+    "おやすみ〜",
+    "いい夢見るんよ？"
+  ]
+
 module.exports = (robot) ->
 
-  robot.hear /のんたん$/, (msg) ->
+  robot.hear /のんたん/, (msg) ->
     msg.send msg.random [
         "ウチのスピリチュアルパワーをあなたに注入♪",
         "ウチのこと呼んだ？",
         "手伝いついでに運勢も占ったげようか？",        
-        "おつかれー！しっかりやすむんよ？",
         "ウチの趣味は占いなんよ。占ってあげよか？"
     ]
 
   robot.respond /tumblr/i, (msg) ->
     blog = msg.random Object.keys(SOURCES)
     getGif blog, msg
+
+  robot.hear /つかれた|疲れた/, (msg) ->
+    sendGoodJop(msg)
+
+  robot.hear /おはよう/, (msg) ->
+    sendGreeting(msg)
+
+  robot.hear /ねる|寝る/, (msg) ->
+    sendGoodNight(msg)
 
 
   robot.hear /今日の運勢/i, (msg) ->

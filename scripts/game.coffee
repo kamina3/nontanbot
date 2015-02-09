@@ -53,7 +53,6 @@ judgeGame = (msg, robot, hand) ->
 
 saveScore = (robot, user, addScore) ->
   if user == null
-    console.log "user nil"
     return
 
   key = "RSPGameScore"

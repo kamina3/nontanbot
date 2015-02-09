@@ -40,7 +40,7 @@ sendGoodNight = (msg) ->
 
 module.exports = (robot) ->
 
-  robot.hear /^のんた.*ん\.*$/, (msg) ->
+  robot.hear /のんた.*ん\.*$/, (msg) ->
     msg.send msg.random [
         "ウチのスピリチュアルパワーをあなたに注入♪",
         "ウチのこと呼んだ？",
@@ -72,8 +72,19 @@ module.exports = (robot) ->
       '凶',
       '大凶'
     ]
-    res = fortunes[Math.floor(Math.random()*7)]
-    msg.send "あなたの今日の運勢は「#{res}」や♪ 今日も1日頑張ろ？"
+    comment = [
+      '良かったやん♪',
+      '今日も1日頑張ろ？',
+      'まぁそこそこやね',
+      'まぁﾌﾂｰやね',
+      '悪くはないね',
+      'まぁ...こんな日もあるよ',
+      '............気をつけるんよ？'
+    ]
+    rand = Math.floor(Math.random()*7)
+    res = fortunes[rand]
+
+    msg.send "あなたの今日の運勢は「#{fortunes[rand]}」や♪ #{comment[rand]}"
 
 
   # robot.hear /badger/i, (msg) ->

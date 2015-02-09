@@ -48,6 +48,9 @@ module.exports = (robot) ->
         "ウチの趣味は占いなんよ。占ってあげよか？"
     ]
 
+  robot.hear /ノンタン/, (msg) ->
+    msg.reply "それはウチのことやないよね？"
+
   robot.respond /tumblr/i, (msg) ->
     blog = msg.random Object.keys(SOURCES)
     getGif blog, msg

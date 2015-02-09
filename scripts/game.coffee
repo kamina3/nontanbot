@@ -24,7 +24,7 @@ judgeGame = (msg, robot, hand) ->
   idx = handDic[hand]
   game = robot.brain.get "RSPGame"
 
-  if game.user[msg.message.user.name]　== true
+  if game.user[msg.message.user.name] == true
     msg.reply "あなたはもうやったやん？"
     return
 
@@ -69,13 +69,14 @@ getScore = (mSecond) ->
   
 showScore = (msg, robot) ->
   key = "RSPGameScore"
-  scoreObj = robot.brain.get key 
+  scoreObj = robot.brain.get key
   if scoreObj == null
     return
   txt = "今の結果はこんな感じやね♪\n"
   for k, v of scoreObj
     txt += "#{k}: #{v}点\n"
   msg.send txt
+
 
 module.exports = (robot) ->
   robot.hear /ゲーム/, (msg) ->
@@ -87,8 +88,17 @@ module.exports = (robot) ->
 
   robot.hear /^結果$/, (msg)->
     showScore(msg, robot)
+
   send = (room, msg) ->
-    response = new robot.Response(robot, {user : {id : -1, name : room}, text : "none", done : false}, [])
+    response = new robot.Response(
+      robot,
+      {
+        user : {id : -1,name : room},
+        text : "none",
+        done : false
+      },
+      []
+    )
     response.send msg
  
   new cronJob('0 0 */9 * * *', () ->

@@ -59,13 +59,23 @@ getScore = (mSecond) ->
 showScore = (msg, robot) ->
   key = "RSPGameScore"
   scoreObj = robot.brain.get key 
-  scoreObj = if scoreObj == null then {} else scoreObj
+  if scoreObj == null
+    return
   txt = "今の結果はこんな感じやね♪\n"
   for k, v of scoreObj
     txt += "#{k}: #{v}点\n"
   msg.send txt
 
 module.exports = (robot) ->
+  robot.hear /ゲーム/, (msg) ->
+    msg.send makeGame(msg, robot)
+
+  robot.hear /^(グー|チョキ|パー)$/, (msg)->
+    hand = msg.match[1].trim()
+    judgeGame(msg, robot, hand)
+
+  robot.hear /^結果$/, (msg)->
+    showScore(msg, robot)
   send = (room, msg) ->
     response = new robot.Response(robot, {user : {id : -1, name : room}, text : "none", done : false}, [])
     response.send msg
@@ -75,13 +85,5 @@ module.exports = (robot) ->
     send '#non-tan', "今は#{new Date().currentTime.getHours()}:00やね"
   ).start()
 
-  robot.hear /ゲーム/, (msg) ->
-    makeGame(msg, robot)
 
-  robot.hear /^(グー|チョキ|パー)$/, (msg)->
-    hand = msg.match[1].trim()
-    judgeGame(msg, robot, hand)
-
-  robot.hear /^結果$/, (msg)->
-    showScore(msg, robot)
 

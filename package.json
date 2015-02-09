@@ -19,7 +19,9 @@
     "hubot-shipit": "^0.1.1",
     "hubot-slack": "^3.2.1",
     "hubot-youtube": "^0.1.2",
-    "tumblrbot": "0.1.0"
+    "tumblrbot": "0.1.0",
+    "cron": "^1.0.5"
+
   },
   "engines": {
     "node": "0.10.x"

@@ -1,14 +1,15 @@
 
 cronJob = require('cron').CronJob
  
-makeGame = (msg, robot) ->
+makeGame = (robot) ->
   pattern = ["グー", "チョキ", "パー"]
   idx = Math.floor(Math.random() * pattern.length)
   hand = pattern[idx]
   txt = "後出しじゃんけんだよ！最初はグー！じゃん！けん！ 「#{hand}」！"
   game = {
     "hand": idx,
-    "time": new Date()
+    "time": new Date(),
+    "user": {}
   }
   robot.brain.set "RSPGame", game
   return txt
@@ -22,20 +23,33 @@ judgeGame = (msg, robot, hand) ->
   }
   idx = handDic[hand]
   game = robot.brain.get "RSPGame"
+
+  if game.user[msg.message.user.name]　== true
+    msg.reply "あなたはもうやったやん？"
+    return
+
+  game.user[msg.message.user.name] = true
+  robot.brain.set "RSPGame", game
+
   judge = game.hand - idx
   message = ""
-  if judge == -2 or judge = 1
+  pm = 1
+
+  if judge == -2 or judge == 1
     message = "あなたの勝ち♪"
+    pm = 1
   else if judge == 0
     message = "引き分けやね"
+    pm = 0
   else
     message = "あなたの負けー♪"
+    pm = -1
 
   
   diffMs = new Date().getTime() - game.time.getTime()
-  score = getScore(diffMs)
+  score = getScore(diffMs) * pm
   saveScore(robot, msg.message.user.name, score)
-  msg.reply message
+  msg.reply message + "#{score}ポイントやね♪"
 
 saveScore = (robot, user, addScore) ->
   if user == null
@@ -45,7 +59,7 @@ saveScore = (robot, user, addScore) ->
   key = "RSPGameScore"
   scoreObj = robot.brain.get key
   scoreObj = if scoreObj == null then {} else scoreObj
-  score = if user in scoreObj then scoreObj[user] else 0
+  score = if scoreObj[user] != null then scoreObj[user] else 0
   score += addScore
   scoreObj[user] = score
   robot.brain.set key ,scoreObj
@@ -78,9 +92,9 @@ module.exports = (robot) ->
     response = new robot.Response(robot, {user : {id : -1, name : room}, text : "none", done : false}, [])
     response.send msg
  
-  new cronJob('0 */10 * * * *', () ->
+  new cronJob('0 0 */9 * * *', () ->
     currentTime = new Date
-    send '#non-tan', "今は#{currentTime.getHours()}:00やね\n"+makeGame()
+    send '#non-tan', "今は#{currentTime.getHours()}:00やね\n"+makeGame(robot)
   ).start()
 
 

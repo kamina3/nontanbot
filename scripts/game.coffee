@@ -80,7 +80,7 @@ showScore = (msg, robot) ->
 
 module.exports = (robot) ->
   robot.hear /ゲーム/, (msg) ->
-    msg.send makeGame(msg, robot)
+    msg.send makeGame(robot)
 
   robot.hear /^(グー|チョキ|パー)$/, (msg)->
     hand = msg.match[1].trim()

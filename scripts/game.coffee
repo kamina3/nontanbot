@@ -31,17 +31,15 @@ judgeGame = (msg, robot, hand) ->
   else
     message = "あなたの負けー♪"
 
-  msg.reply message
+  
   diffMs = new Date().getTime() - game.time.getTime()
-  msg.reply new Date()
-  msg.reply game.time
-  msg.reply (diffMs / 1000 / 60)
-  msg.reply getScore(diffMs)
-
-  saveScore(robot, msg.message.user.name, getScore(diffMs))
+  score = getScore(diffMs)
+  saveScore(robot, msg.message.user.name, score)
+  msg.reply message
 
 saveScore = (robot, user, addScore) ->
   if user == null
+    console.log "user nil"
     return
 
   key = "RSPGameScore"
@@ -80,9 +78,9 @@ module.exports = (robot) ->
     response = new robot.Response(robot, {user : {id : -1, name : room}, text : "none", done : false}, [])
     response.send msg
  
-  new cronJob('0 * * * * *', () ->
+  new cronJob('0 */10 * * * *', () ->
     currentTime = new Date
-    send '#non-tan', "今は#{new Date().currentTime.getHours()}:00やね"
+    send '#non-tan', "今は#{currentTime.getHours()}:00やね\n"+makeGame()
   ).start()
 
 

@@ -101,11 +101,14 @@ module.exports = (robot) ->
     )
     response.send msg
  
-  new cronJob('0 */5 * * * *', () ->
+  new cronJob('0 */30 * * * *', () ->
     currentTime = new Date
     room = 'non-tan'
+    messe = makeGame(robot)
     # msg = "今は#{currentTime.getHours()}:00やね\n"+makeGame(robot)
-    robot.messageRoom room, 'test', null, true, 'Asia/Tokyo'
+    rand = Math.floor(Math.random() * 100)
+    if rand < 20
+      robot.messageRoom room, messe, null, true, 'Asia/Tokyo'
   ).start()
 
 

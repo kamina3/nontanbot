@@ -101,20 +101,11 @@ module.exports = (robot) ->
     )
     response.send msg
  
-  new cronJob('0 0 */9 * * *', () ->
+  new cronJob('0 */5 * * * *', () ->
     currentTime = new Date
-    room = '#non-tan'
-    msg = "今は#{currentTime.getHours()}:00やね\n"+makeGame(robot)
-    response = new robot.Response(
-      robot,
-      {
-        user : {id : -1,name : room},
-        text : "none",
-        done : false
-      },
-      []
-    )
-    response.send msg
+    room = 'non-tan'
+    # msg = "今は#{currentTime.getHours()}:00やね\n"+makeGame(robot)
+    robot.messageRoom room, 'test', null, true, 'Asia/Tokyo'
   ).start()
 
 

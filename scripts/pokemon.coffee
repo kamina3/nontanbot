@@ -126,7 +126,7 @@ showScore = (robot) ->
   return txt
 
 module.exports = (robot) ->
-  new cronJob('*/30 * * * * *', () ->
+  new cronJob('0 0 6 * * *', () ->
     if !existEnemy(robot)
       newGame(robot)
   ).start()
@@ -145,16 +145,3 @@ module.exports = (robot) ->
 
   robot.hear /^attack/, (msg) ->
     attackPokemon(msg, robot)
-
-  robot.respond /test/i, (msg) ->
-    request.get("http://api.tiqav.com/search.json?q=#{msg.match[1]}", (error, response, body) ->
-      if error or response.statusCode != 200
-        return msg.send('画像検索に失敗しました...')
-      data = JSON.parse(body)[0]
-      # robot.logger.info data
-      msg.send "画像の様子です: http://img.tiqav.com/#{data.id}.#{data.ext}" )
-
-
-  robot.hear /^debug/, (msg) ->
-    game = robot.brain.get "PokemonBattle"
-    console.log game

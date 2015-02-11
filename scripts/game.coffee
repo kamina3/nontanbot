@@ -58,7 +58,7 @@ saveScore = (robot, user, addScore) ->
   key = "RSPGameScore"
   scoreObj = robot.brain.get key
   scoreObj = if scoreObj == null then {} else scoreObj
-  score = if scoreObj[user] != null then scoreObj[user] else 0
+  score = if scoreObj[user]? then scoreObj[user] else 0
   score += addScore
   scoreObj[user] = score
   robot.brain.set key ,scoreObj

@@ -68,7 +68,6 @@ existEnemy = (robot) ->
   key = "PokemonBattle"
   game = robot.brain.get key
   if game == null or game.hp == 0
-    console.log "敵がいないっぽいね？"
     return false
   else
     return true
@@ -131,13 +130,13 @@ module.exports = (robot) ->
       newGame(robot)
   ).start()
 
-  robot.hear /^join$/, (msg) ->
+  robot.hear /^pbattle$/, (msg) ->
     if checkChangeTime(msg, robot)
       newPokemon(msg, robot)
     else
       msg.send "もう変えられないよ？"
 
-  robot.hear /^change$/, (msg) ->
+  robot.hear /^pchange$/, (msg) ->
     if checkChangeTime(msg, robot)
       newPokemon(msg, robot)
     else
@@ -150,4 +149,4 @@ module.exports = (robot) ->
     msg.send showScore(robot)
 
   robot.hear /^pokemon help$/, (msg) ->
-    msg.send "help: 参加「join」攻撃「atk」ポケモン変更「change」現在の結果「pokemon result」"
+    msg.send "help: 参加「pbattle」攻撃「atk」ポケモン変更「pchange」現在の結果「pokemon result」"

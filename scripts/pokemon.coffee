@@ -143,5 +143,11 @@ module.exports = (robot) ->
     else
       msg.send "もう変えられないよ？"
 
-  robot.hear /^attack/, (msg) ->
+  robot.hear /^atk/, (msg) ->
     attackPokemon(msg, robot)
+
+  robot.hear /^pokemon result$/, (msg) ->
+    msg.send showScore(robot)
+
+  robot.hear /^pokemon help$/, (msg) ->
+    msg.send "help: 参加「join」攻撃「atk」ポケモン変更「change」現在の結果「pokemon result」"

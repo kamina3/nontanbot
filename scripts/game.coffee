@@ -89,27 +89,16 @@ module.exports = (robot) ->
   robot.hear /^結果$/, (msg)->
     showScore(msg, robot)
 
-  send = (room, msg) ->
-    response = new robot.Response(
-      robot,
-      {
-        user : {id : -1,name : room},
-        text : "none",
-        done : false
-      },
-      []
-    )
-    response.send msg
- 
-  new cronJob('0 */30 * * * *', () ->
-    currentTime = new Date
-    room = 'non-tan'
-    messe = makeGame(robot)
-    # msg = "今は#{currentTime.getHours()}:00やね\n"+makeGame(robot)
-    rand = Math.floor(Math.random() * 100)
-    if rand < 20
-      robot.messageRoom room, messe, null, true, 'Asia/Tokyo'
-  ).start()
+ # とりあえずポケモンが稼働したので止め。
+  # new cronJob('0 */30 * * * *', () ->
+  #   currentTime = new Date
+  #   room = 'non-tan'
+  #   messe = makeGame(robot)
+  #   # msg = "今は#{currentTime.getHours()}:00やね\n"+makeGame(robot)
+  #   rand = Math.floor(Math.random() * 100)
+  #   if rand < 5
+  #     robot.messageRoom room, messe, null, true, 'Asia/Tokyo'
+  # ).start()
 
 
 

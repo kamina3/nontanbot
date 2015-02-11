@@ -126,7 +126,7 @@ showScore = (robot) ->
   return txt
 
 module.exports = (robot) ->
-  new cronJob('0 0 6 * * *', () ->
+  new cronJob('*/30 * * * * *', () ->
     if !existEnemy(robot)
       newGame(robot)
   ).start()

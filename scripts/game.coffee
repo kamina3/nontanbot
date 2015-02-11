@@ -1,104 +1,104 @@
 
-cronJob = require('cron').CronJob
+# cronJob = require('cron').CronJob
  
-makeGame = (robot) ->
-  pattern = ["グー", "チョキ", "パー"]
-  idx = Math.floor(Math.random() * pattern.length)
-  hand = pattern[idx]
-  txt = "後出しじゃんけんだよ！最初はグー！じゃん！けん！ 「#{hand}」！"
-  game = {
-    "hand": idx,
-    "time": new Date(),
-    "user": {}
-  }
-  robot.brain.set "RSPGame", game
-  return txt
+# makeGame = (robot) ->
+#   pattern = ["グー", "チョキ", "パー"]
+#   idx = Math.floor(Math.random() * pattern.length)
+#   hand = pattern[idx]
+#   txt = "後出しじゃんけんだよ！最初はグー！じゃん！けん！ 「#{hand}」！"
+#   game = {
+#     "hand": idx,
+#     "time": new Date(),
+#     "user": {}
+#   }
+#   robot.brain.set "RSPGame", game
+#   return txt
 
 
-judgeGame = (msg, robot, hand) ->
-  handDic = {
-    "グー": 0,
-    "チョキ": 1,
-    "パー": 2
-  }
-  idx = handDic[hand]
-  game = robot.brain.get "RSPGame"
+# judgeGame = (msg, robot, hand) ->
+#   handDic = {
+#     "グー": 0,
+#     "チョキ": 1,
+#     "パー": 2
+#   }
+#   idx = handDic[hand]
+#   game = robot.brain.get "RSPGame"
 
-  if game.user[msg.message.user.name]? &&  game.user[msg.message.user.name]
-    msg.reply "あなたはもうやったやん？"
-    return
+#   if game.user[msg.message.user.name]? &&  game.user[msg.message.user.name]
+#     msg.reply "あなたはもうやったやん？"
+#     return
 
-  game.user[msg.message.user.name] = true
-  robot.brain.set "RSPGame", game
+#   game.user[msg.message.user.name] = true
+#   robot.brain.set "RSPGame", game
 
-  judge = game.hand - idx
-  message = ""
-  pm = 1
+#   judge = game.hand - idx
+#   message = ""
+#   pm = 1
 
-  if judge == -2 or judge == 1
-    message = "あなたの勝ち♪"
-    pm = 1
-  else if judge == 0
-    message = "引き分けやね"
-    pm = 0
-  else
-    message = "あなたの負けー♪"
-    pm = -1
+#   if judge == -2 or judge == 1
+#     message = "あなたの勝ち♪"
+#     pm = 1
+#   else if judge == 0
+#     message = "引き分けやね"
+#     pm = 0
+#   else
+#     message = "あなたの負けー♪"
+#     pm = -1
 
   
-  diffMs = new Date().getTime() - game.time.getTime()
-  score = getScore(diffMs) * pm
-  saveScore(robot, msg.message.user.name, score)
-  msg.reply message + "#{score}ポイントやね♪"
+#   diffMs = new Date().getTime() - game.time.getTime()
+#   score = getScore(diffMs) * pm
+#   saveScore(robot, msg.message.user.name, score)
+#   msg.reply message + "#{score}ポイントやね♪"
 
-saveScore = (robot, user, addScore) ->
-  if user == null
-    return
+# saveScore = (robot, user, addScore) ->
+#   if user == null
+#     return
 
-  key = "RSPGameScore"
-  scoreObj = robot.brain.get key
-  scoreObj = if scoreObj == null then {} else scoreObj
-  score = if scoreObj[user]? then scoreObj[user] else 0
-  score += addScore
-  scoreObj[user] = score
-  robot.brain.set key ,scoreObj
+#   key = "RSPGameScore"
+#   scoreObj = robot.brain.get key
+#   scoreObj = if scoreObj == null then {} else scoreObj
+#   score = if scoreObj[user]? then scoreObj[user] else 0
+#   score += addScore
+#   scoreObj[user] = score
+#   robot.brain.set key ,scoreObj
 
-getScore = (mSecond) ->
-  score = Math.floor(30 - (mSecond / (1000 * 60)))+1
-  return Math.max(score, 1)
+# getScore = (mSecond) ->
+#   score = Math.floor(30 - (mSecond / (1000 * 60)))+1
+#   return Math.max(score, 1)
   
-showScore = (msg, robot) ->
-  key = "RSPGameScore"
-  scoreObj = robot.brain.get key
-  if scoreObj == null
-    return
-  txt = "今の結果はこんな感じやね♪\n"
-  for k, v of scoreObj
-    txt += "#{k}: #{v}点\n"
-  msg.send txt
+# showScore = (msg, robot) ->
+#   key = "RSPGameScore"
+#   scoreObj = robot.brain.get key
+#   if scoreObj == null
+#     return
+#   txt = "今の結果はこんな感じやね♪\n"
+#   for k, v of scoreObj
+#     txt += "#{k}: #{v}点\n"
+#   msg.send txt
 
 
-module.exports = (robot) ->
-  # robot.hear /ゲーム/, (msg) ->
-  #   msg.send makeGame(robot)
+# module.exports = (robot) ->
+#   # robot.hear /ゲーム/, (msg) ->
+#   #   msg.send makeGame(robot)
 
-  robot.hear /^(グー|チョキ|パー)$/, (msg)->
-    hand = msg.match[1].trim()
-    judgeGame(msg, robot, hand)
+#   robot.hear /^(グー|チョキ|パー)$/, (msg)->
+#     hand = msg.match[1].trim()
+#     judgeGame(msg, robot, hand)
 
-  robot.hear /^結果$/, (msg)->
-    showScore(msg, robot)
+#   robot.hear /^結果$/, (msg)->
+#     showScore(msg, robot)
 
- # とりあえずポケモンが稼働したので止め。
-  # new cronJob('0 */30 * * * *', () ->
-  #   currentTime = new Date
-  #   room = 'non-tan'
-  #   messe = makeGame(robot)
-  #   # msg = "今は#{currentTime.getHours()}:00やね\n"+makeGame(robot)
-  #   rand = Math.floor(Math.random() * 100)
-  #   if rand < 5
-  #     robot.messageRoom room, messe, null, true, 'Asia/Tokyo'
-  # ).start()
+#  # とりあえずポケモンが稼働したので止め。
+#   # new cronJob('0 */30 * * * *', () ->
+#   #   currentTime = new Date
+#   #   room = 'non-tan'
+#   #   messe = makeGame(robot)
+#   #   # msg = "今は#{currentTime.getHours()}:00やね\n"+makeGame(robot)
+#   #   rand = Math.floor(Math.random() * 100)
+#   #   if rand < 5
+#   #     robot.messageRoom room, messe, null, true, 'Asia/Tokyo'
+#   # ).start()
 
 
 

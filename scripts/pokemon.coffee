@@ -131,19 +131,19 @@ module.exports = (robot) ->
       newGame(robot)
   ).start()
 
-  robot.hear /^join/, (msg) ->
+  robot.hear /^join$/, (msg) ->
     if checkChangeTime(msg, robot)
       newPokemon(msg, robot)
     else
       msg.send "もう変えられないよ？"
 
-  robot.hear /^change/, (msg) ->
+  robot.hear /^change$/, (msg) ->
     if checkChangeTime(msg, robot)
       newPokemon(msg, robot)
     else
       msg.send "もう変えられないよ？"
 
-  robot.hear /^atk/, (msg) ->
+  robot.hear /^atk$/, (msg) ->
     attackPokemon(msg, robot)
 
   robot.hear /^pokemon result$/, (msg) ->

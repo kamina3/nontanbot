@@ -24,7 +24,7 @@ judgeGame = (msg, robot, hand) ->
   idx = handDic[hand]
   game = robot.brain.get "RSPGame"
 
-  if game.user[msg.message.user.name] == true
+  if game.user[msg.message.user.name]? &&  game.user[msg.message.user.name]
     msg.reply "あなたはもうやったやん？"
     return
 

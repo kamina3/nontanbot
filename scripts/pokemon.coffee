@@ -19,15 +19,12 @@ newGame = (robot) ->
   robot.messageRoom 'pokemon', "野生の「#{game.enemy}」が出てきたよ！"
 
 newPokemon = (msg, robot) ->
-  # request = msg.http('http://pokeapi.co/api/v1/pokemon/1').get()
-  console.log("newPokemon!")
+  
   number = Math.floor(Math.random() * 150)
   request.get("http://pokeapi.co/api/v1/pokemon/#{number}", (error, response, body) ->
     if error or response.statusCode != 200
-      consolelog("failed...")
       return
     data = JSON.parse(body)
-    console.log(data)
     # msg.send data.name
     key = "PokemonBattle"
     game = robot.brain.get key
@@ -129,16 +126,10 @@ showScore = (robot) ->
   return txt
 
 module.exports = (robot) ->
-  new cronJob('0 */5 * * * *', () ->
+  new cronJob('0 0 6 * * *', () ->
     if !existEnemy(robot)
       newGame(robot)
-  )
-
-  # robot.hear /^newgame/, (msg) ->
-  #   if existEnemy(robot)
-  #     msg.send "まだ倒してないっぽい"
-  #     return
-  #   newGame(robot)
+  ).start()
 
   robot.hear /^join/, (msg) ->
     if checkChangeTime(msg, robot)

@@ -82,13 +82,13 @@ attackPokemon = (msg, robot) ->
     msg.send "ポケモンいないのにどうやって戦うん？「nontan phelp」コマンド見てや〜"
     return
 
-  if !game.lastAttackDate? or (new Date().getTime() - game.lastAttackDate.getTime()) > 1000 * 60 * 60
-    game.lastAttacker == "nobody"
-    game.lastAttackDate = new Date()
+  # if !game.lastAttackDate? or (new Date().getTime() - game.lastAttackDate.getTime()) > 1000 * 60 * 60
+  #   game.lastAttacker == "nobody"
+  #   game.lastAttackDate = new Date()
 
-  if game.lastAttacker == msg.message.user.name
-    msg.send "二度連続攻撃はできひんのやで？"
-    return
+  # if game.lastAttacker == msg.message.user.name
+  #   msg.send "二度連続攻撃はできひんのやで？"
+  #   return
 
   pokemon = game.usersPokemon[msg.message.user.name]
   damage = Math.floor(pokemon.atk * (80 + Math.random() * 30) / 100)

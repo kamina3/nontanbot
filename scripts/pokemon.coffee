@@ -34,7 +34,7 @@ newPokemon = (msg, robot) ->
       "atk": data.attack
     }
     count = game.userChangeTimes[msg.message.user.name]
-    if count == null or isNaN(count)
+    if !count?
       count = 0
     count += 1
     game.userChangeTimes[msg.message.user.name] = count
@@ -82,7 +82,7 @@ attackPokemon = (msg, robot) ->
     msg.send "ポケモンいないのにどうやって戦うん？「nontan phelp」コマンド見てや〜"
     return
 
-  if !game.lastAttackDate? or (new Date().getTime() - game.lastAttackDate.getTime()) < 1000 * 60 * 60
+  if !game.lastAttackDate? or (new Date().getTime() - game.lastAttackDate.getTime()) > 1000 * 60 * 60
     game.lastAttacker == ""
     game.lastAttackDate = new Date()
 
@@ -136,7 +136,7 @@ module.exports = (robot) ->
       newGame(robot)
   ).start()
 
-  robot.respond /battle$/i, (msg) ->
+  robot.respond /join$/i, (msg) ->
     if checkChangeTime(msg, robot)
       newPokemon(msg, robot)
     else
@@ -155,4 +155,4 @@ module.exports = (robot) ->
     msg.send showScore(robot)
 
   robot.respond /phelp$/i, (msg) ->
-    msg.send "help: 参加「pbattle」攻撃「atk」ポケモン変更「pchange」現在の結果「presult」"
+    msg.send "help: 参加「join」攻撃「atk」ポケモン変更「pchange」現在の結果「presult」"

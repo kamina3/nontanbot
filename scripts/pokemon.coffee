@@ -83,7 +83,7 @@ attackPokemon = (msg, robot) ->
     return
 
   if !game.lastAttackDate? or (new Date().getTime() - game.lastAttackDate.getTime()) > 1000 * 60 * 60
-    game.lastAttacker == ""
+    game.lastAttacker == "nobody"
     game.lastAttackDate = new Date()
 
   if game.lastAttacker == msg.message.user.name

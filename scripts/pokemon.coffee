@@ -12,7 +12,8 @@ newGame = (robot) ->
     "hp": 500,
     "lastAttacker": "",
     "usersPokemon": {},
-    "userChangeTimes": {}
+    "userChangeTimes": {},
+    "lastAttackDate":new Date()
   }
   game.enemy = "にせかみなさん"
   robot.brain.set key, game
@@ -38,7 +39,7 @@ newPokemon = (msg, robot) ->
     count += 1
     game.userChangeTimes[msg.message.user.name] = count
     robot.brain.set key, game
-    msg.send "ポケモン交代！「#{data.name}」"
+    msg.send "ポケモン交代！「#{data.name}（ATK: #{data.attack}）」"
     showPokemonImage(msg, data.name)
   )
 showPokemonImage = (msg, pokemon) ->
@@ -67,7 +68,7 @@ checkChangeTime = (msg, robot) ->
 existEnemy = (robot) ->
   key = "PokemonBattle"
   game = robot.brain.get key
-  if game == null or game.hp == 0
+  if !game? or game.hp == 0
     return false
   else
     return true
@@ -78,8 +79,12 @@ attackPokemon = (msg, robot) ->
   key = "PokemonBattle"
   game = robot.brain.get key
   if !game.usersPokemon[msg.message.user.name]?
-    msg.send "ポケモンいないのにどうやって戦うん？「join」コマンドで参加やで〜"
+    msg.send "ポケモンいないのにどうやって戦うん？「nontan phelp」コマンド見てや〜"
     return
+
+  if !game.lastAttackDate? or (new Date().getTime() - game.lastAttackDate.getTime()) < 1000 * 60 * 60
+    game.lastAttacker == ""
+    game.lastAttackDate = new Date()
 
   if game.lastAttacker == msg.message.user.name
     msg.send "二度連続攻撃はできひんのやで？"
@@ -100,7 +105,8 @@ attackPokemon = (msg, robot) ->
   robot.brain.set key, game
   saveScore(msg, robot, damage)
 
-  if game.hp == 0 # セーブした後に結果出すためのチェック
+  # セーブした後に結果出すためのチェック
+  if game.hp == 0 
     mes += showScore(robot)
   msg.send mes
 
@@ -130,23 +136,23 @@ module.exports = (robot) ->
       newGame(robot)
   ).start()
 
-  robot.hear /^pbattle$/, (msg) ->
+  robot.respond /battle$/i, (msg) ->
     if checkChangeTime(msg, robot)
       newPokemon(msg, robot)
     else
       msg.send "もう変えられないよ？"
 
-  robot.hear /^pchange$/, (msg) ->
+  robot.respond /pchange$/i, (msg) ->
     if checkChangeTime(msg, robot)
       newPokemon(msg, robot)
     else
       msg.send "もう変えられないよ？"
 
-  robot.hear /^atk$/, (msg) ->
+  robot.respond /atk$/i, (msg) ->
     attackPokemon(msg, robot)
 
-  robot.hear /^pokemon result$/, (msg) ->
+  robot.respond /presult$/i, (msg) ->
     msg.send showScore(robot)
 
-  robot.hear /^pokemon help$/, (msg) ->
-    msg.send "help: 参加「pbattle」攻撃「atk」ポケモン変更「pchange」現在の結果「pokemon result」"
+  robot.respond /phelp$/i, (msg) ->
+    msg.send "help: 参加「pbattle」攻撃「atk」ポケモン変更「pchange」現在の結果「presult」"

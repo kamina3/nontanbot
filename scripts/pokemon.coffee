@@ -17,7 +17,7 @@ newGame = (robot) ->
   }
   game.enemy = "にせかみなさん"
   robot.brain.set key, game
-  robot.messageRoom 'pokemon', "野生の「#{game.enemy}」が出てきたよ！"
+  robot.messageRoom 'non-tan', "野生の「#{game.enemy}」が出てきたよ！"
 
 newPokemon = (msg, robot) ->
   
@@ -136,8 +136,8 @@ module.exports = (robot) ->
       newGame(robot)
   ).start()
 
-  robot.hear /^はじめ/, (msg) ->
-    newGame(robot)
+  # robot.hear /^はじめ/, (msg) ->
+  #   newGame(robot)
 
   robot.hear /^いけ/i, (msg) ->
     if checkChangeTime(msg, robot)

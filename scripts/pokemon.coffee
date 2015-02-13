@@ -86,9 +86,9 @@ attackPokemon = (msg, robot) ->
   #   game.lastAttacker == "nobody"
   #   game.lastAttackDate = new Date()
 
-  # if game.lastAttacker == msg.message.user.name
-  #   msg.send "二度連続攻撃はできひんのやで？"
-  #   return
+  if game.lastAttacker == msg.message.user.name
+    msg.send "二度連続攻撃はできひんのやで？"
+    return
 
   pokemon = game.usersPokemon[msg.message.user.name]
   damage = Math.floor(pokemon.atk * (80 + Math.random() * 30) / 100)
@@ -136,23 +136,26 @@ module.exports = (robot) ->
       newGame(robot)
   ).start()
 
-  robot.respond /join$/i, (msg) ->
+  robot.hear /^はじめ/, (msg) ->
+    newGame(robot)
+
+  robot.hear /^いけ/i, (msg) ->
     if checkChangeTime(msg, robot)
       newPokemon(msg, robot)
     else
       msg.send "もう変えられないよ？"
 
-  robot.respond /pchange$/i, (msg) ->
+  robot.hear /^もどれ/i, (msg) ->
     if checkChangeTime(msg, robot)
       newPokemon(msg, robot)
     else
       msg.send "もう変えられないよ？"
 
-  robot.respond /atk$/i, (msg) ->
+  robot.hear /^たたかう/i, (msg) ->
     attackPokemon(msg, robot)
 
-  robot.respond /presult$/i, (msg) ->
+  robot.hear /^戦績$/i, (msg) ->
     msg.send showScore(robot)
 
-  robot.respond /phelp$/i, (msg) ->
-    msg.send "help: 参加「join」攻撃「atk」ポケモン変更「pchange」現在の結果「presult」"
+  robot.hear /ポケモンヘルプ$/i, (msg) ->
+    msg.send "help: 参加 「いけ」/ 攻撃「たたかう」ポケモン変更「もどれ」現在の結果「戦績」"

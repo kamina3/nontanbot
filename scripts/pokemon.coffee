@@ -10,6 +10,7 @@ newGame = (robot) ->
   game = {
     "enemy": "",
     "hp": 500,
+    "maxhp": 500,
     "lastAttacker": "",
     "usersPokemon": {},
     "userChangeTimes": {},
@@ -88,7 +89,7 @@ attackPokemon = (msg, robot) ->
   if isNaN(lastDateTime)
     lastDateTime = 0
 
-  if (new Date().getTime() - lastDateTime) > 1000# * 60 * 60
+  if (new Date().getTime() - lastDateTime) > 1000 * 60 * 60
     console.log("timelimit ok")
     game.lastAttacker = "nobody"
 
@@ -100,7 +101,7 @@ attackPokemon = (msg, robot) ->
   damage = Math.floor(pokemon.atk * (80 + Math.random() * 30) / 100)
   damage = Math.min(damage, game.hp)
   game.hp -= damage
-  mes = "#{game.enemy}に#{damage}ダメージ！\n"
+  mes = "#{pokemon.name}の攻撃！#{game.enemy}に#{damage}ダメージ！\n 残りHP#{game.hp}/#{game.maxhp}\n"
   if game.lastAttacker == ""
     mes += "最初の攻撃！ボーナスポイント！\n"
     damage += 30

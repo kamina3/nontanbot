@@ -13,7 +13,7 @@ newGame = (robot) ->
     "lastAttacker": "",
     "usersPokemon": {},
     "userChangeTimes": {},
-    "lastAttackDate":new Date()
+    "lastAttackDate":new Date().getTime()
   }
   game.enemy = "にせかみなさん"
   robot.brain.set key, game
@@ -75,6 +75,7 @@ existEnemy = (robot) ->
 
 attackPokemon = (msg, robot) ->
   if !existEnemy(robot)
+    msg.send "敵おらへんよ？"
     return
   key = "PokemonBattle"
   game = robot.brain.get key
@@ -82,9 +83,12 @@ attackPokemon = (msg, robot) ->
     msg.send "ポケモンいないのにどうやって戦うん？「nontan phelp」コマンド見てや〜"
     return
 
-  # if !game.lastAttackDate? or (new Date().getTime() - game.lastAttackDate.getTime()) > 1000 * 60 * 60
-  #   game.lastAttacker == "nobody"
-  #   game.lastAttackDate = new Date()
+  lastDateTime = parseInt(game.lastAttackDate)
+  if isNaN(lastDateTime)
+    lastDateTime = 0
+  if (new Date().getTime() - lastDateTime) > 1000 * 60 * 60
+    game.lastAttacker == "nobody"
+    game.lastAttackDate = new Date().getTime()
 
   if game.lastAttacker == msg.message.user.name
     msg.send "二度連続攻撃はできひんのやで？"

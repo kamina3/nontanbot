@@ -28,13 +28,18 @@ module.exports = (robot) ->
       msg.reply "「#{key}」はこれやろ？\n#{value}"
     else if value?
       text = ""
+      mine = ""
       for k, v of value
-        if k == key
+        if k == msg.message.user.name and k == key
+          mine = "ちなみにあなた自身は「#{v}」やって言ってたで？覚えてる？"
+        else if k == msg.message.user.name
+          mine = "ちなみにあなた自身は「#{key}」のこと、「#{v}」やって言ってたやんな？"
+        else if k == key
           text += "「#{k}」自身は「#{v}」、"
         else
           text += "「#{k}」は「#{v}」、"
       if text.length > 0
-        msg.reply "ああ、えっと「#{key}」のことやね、\n#{text}って言ってたやんな"
+        msg.reply "ああ、えっと「#{key}」のことやね、\n#{text}って言ってたやんな\n#{mine}"
     else
       msg.reply "それは知らんみたい... ごめんね。"
 

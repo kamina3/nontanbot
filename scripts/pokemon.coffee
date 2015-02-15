@@ -79,6 +79,7 @@ attackPokemon = (msg, robot) ->
     return
   key = "PokemonBattle"
   game = robot.brain.get key
+  console.log(game)
   if !game.usersPokemon[msg.message.user.name]?
     msg.send "ポケモンいないのにどうやって戦うん？「nontan phelp」コマンド見てや〜"
     return
@@ -86,10 +87,9 @@ attackPokemon = (msg, robot) ->
   lastDateTime = parseInt(game.lastAttackDate)
   if isNaN(lastDateTime)
     lastDateTime = 0
-    console.log(lastDateTime)
-    console.log(new Date().getTime)
 
-  if (new Date().getTime() - lastDateTime) > 1000 * 60 * 60
+  if (new Date().getTime() - lastDateTime) > 1000# * 60 * 60
+    console.log("timelimit ok")
     game.lastAttacker = "nobody"
 
   if game.lastAttacker == msg.message.user.name

@@ -86,6 +86,9 @@ attackPokemon = (msg, robot) ->
   lastDateTime = parseInt(game.lastAttackDate)
   if isNaN(lastDateTime)
     lastDateTime = 0
+    console.log(lastDateTime)
+    console.log(new Date().getTime)
+
   if (new Date().getTime() - lastDateTime) > 1000 * 60 * 60
     game.lastAttacker == "nobody"
     game.lastAttackDate = new Date().getTime()

@@ -90,8 +90,7 @@ attackPokemon = (msg, robot) ->
     console.log(new Date().getTime)
 
   if (new Date().getTime() - lastDateTime) > 1000 * 60 * 60
-    game.lastAttacker == "nobody"
-    game.lastAttackDate = new Date().getTime()
+    game.lastAttacker = "nobody"
 
   if game.lastAttacker == msg.message.user.name
     msg.send "二度連続攻撃はできひんのやで？"
@@ -105,7 +104,9 @@ attackPokemon = (msg, robot) ->
   if game.lastAttacker == ""
     mes += "最初の攻撃！ボーナスポイント！\n"
     damage += 30
+
   game.lastAttacker = msg.message.user.name
+  game.lastAttackDate = new Date().getTime()
   if game.hp == 0
     mes += "#{game.enemy}は倒れた！ボーナスポイント！\n"
     damage += 30

@@ -31,15 +31,17 @@ module.exports = (robot) ->
       mine = ""
       for k, v of value
         if k == msg.message.user.name and k == key
-          mine = "ちなみにあなた自身は「#{v}」やって言ってたで？覚えてる？"
+          mine = "あなた自身は「#{v}」やってゆうてたで？覚えてる？"
         else if k == msg.message.user.name
-          mine = "ちなみにあなた自身は「#{key}」のこと、「#{v}」やって言ってたやんな？"
+          mine = "あなた自身は「#{key}」のこと、「#{v}」やってゆうてたで"
         else if k == key
           text += "「#{k}」自身は「#{v}」、"
         else
           text += "「#{k}」は「#{v}」、"
       if text.length > 0
         msg.reply "ああ、えっと「#{key}」のことやね、\n#{text}って言ってたやんな\n#{mine}"
+      else if mine.length > 0
+        msg.reply "ああ、えっと「#{key}」のことやね、"+ mine
     else
       msg.reply "それは知らんみたい... ごめんね。"
 

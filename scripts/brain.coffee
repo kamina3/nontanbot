@@ -51,7 +51,13 @@ module.exports = (robot) ->
     key = msg.match[1].trim()
     value = robot.brain.get(key) or null
     if value?
-      msg.reply "あ、それウチ知ってるよ。「#{key}」は「#{value}」やんな？"
+      text = ""
+      if isType('String', value)
+        text = value
+      else
+        for k, v of value
+          text += "「v」"
+      msg.reply "あ、それウチ知ってるよ。「#{key}」は#{value}やんな？"
     else
       msg.reply "うーん、聞いたことないなー"
   

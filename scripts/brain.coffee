@@ -57,7 +57,7 @@ module.exports = (robot) ->
       else
         for k, v of value
           text += "「v」"
-      msg.reply "あ、それウチ知ってるよ。「#{key}」は#{value}やんな？"
+      msg.reply "あ、それウチ知ってるよ。「#{key}」は#{text}やんな？"
     else
       msg.reply "うーん、聞いたことないなー"
   

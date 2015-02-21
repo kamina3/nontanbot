@@ -155,6 +155,8 @@ saveScore = (msg, robot, addScore) ->
   if !scoreObj[msg.message.user.name]?
     scoreObj[msg.message.user.name] = 0
   scoreObj[msg.message.user.name] += addScore
+  if scoreObj[msg.message.user.name] < 0
+    scoreObj[msg.message.user.name] = 0
   robot.brain.set key, scoreObj
 
 showScore = (robot) ->
@@ -167,10 +169,15 @@ showScore = (robot) ->
     txt += "#{k}: #{v}pt\n"
   return txt
 
-resetScore = (robot) ->
+resetScore = (msg, robot) ->
   key = "PokemonBattleScore"
-  obj = {}
-  robot.brain.set key, {}
+  scoreObj = robot.brain.get key
+  if !scoreObj?
+    scoreObj = {}
+  if !scoreObj[msg.message.user.name]?
+    scoreObj[msg.message.user.name] = 0
+  scoreObj[msg.message.user.name] =0
+  robot.brain.set key, scoreObj
 
 module.exports = (robot) ->
   new cronJob('0 0 6 * * *', () ->
@@ -179,8 +186,7 @@ module.exports = (robot) ->
   ).start()
 
   robot.respond /score reset/i, (msg) ->
-    if msg.message.user.name == "kamina"
-      resetScore(robot)
+    resetScore(msg, robot)
 
   # robot.hear /^はじめ/, (msg) ->
   #   newGame(robot)

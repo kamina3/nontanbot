@@ -5,8 +5,8 @@ cronJob = require('cron').CronJob
 newGame = (robot) ->
   key = "PokemonBattle"
   game = robot.brain.get key
-  if existEnemy(robot)
-    return
+  # if existEnemy(robot)
+  #   return
   game = {
     "enemy": "",
     "hp": 500,
@@ -180,9 +180,9 @@ resetScore = (msg, robot) ->
   robot.brain.set key, scoreObj
 
 module.exports = (robot) ->
-  new cronJob('0 0 6 * * *', () ->
-    if !existEnemy(robot)
-      newGame(robot)
+  new cronJob('0 0 */3 * * *', () ->
+    # if !existEnemy(robot)
+    newGame(robot)
   ).start()
 
   robot.respond /score reset/i, (msg) ->

@@ -26,7 +26,7 @@ newGame = (robot) ->
 
     game.enemy = data.name
     game.maxhp = data.hp * 5
-    # game.atk = data.attack
+    game.atk = data.attack
     game.hp = game.maxhp
     robot.brain.set key, game
     text = ">野生の「#{game.enemy}（hp:#{game.hp}/#{game.maxhp}）(atk:#{game.atk})」が出てきたよ！"
@@ -44,7 +44,6 @@ newPokemon = (msg, robot) ->
     if error or response.statusCode != 200
       return
     data = JSON.parse(body)
-    # msg.send data.name
     key = "PokemonBattle"
     game = robot.brain.get key
     game.usersPokemon[msg.message.user.name] = {

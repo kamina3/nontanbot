@@ -11,14 +11,31 @@ newGame = (robot) ->
     "enemy": "",
     "hp": 500,
     "maxhp": 500,
+    "atk": 10,
     "lastAttacker": "",
     "usersPokemon": {},
     "userChangeTimes": {},
     "lastAttackDate":new Date().getTime()
   }
-  game.enemy = "にせかみなさん"
-  robot.brain.set key, game
-  robot.messageRoom 'non-tan', "野生の「#{game.enemy}」が出てきたよ！"
+
+  number = Math.floor(Math.random() * 450)
+  request.get("http://pokeapi.co/api/v1/pokemon/#{number}", (error, response, body) ->
+    if error or response.statusCode != 200
+      return
+    data = JSON.parse(body)
+
+    game.enemy = data.name
+    game.maxhp = data.hp * 5
+    # game.atk = data.attack
+    game.hp = game.maxhp
+    robot.brain.set key, game
+    text = ">野生の「#{game.enemy}（hp:#{game.hp}/#{game.maxhp}）(atk:#{game.atk})」が出てきたよ！"
+    q = "#{game.enemy}+pokemon"
+    request.get("http://ajax.googleapis.com/ajax/services/search/images?q=#{q}&v=1.0" ,(error, response, body) ->
+      img_url = JSON.parse(body).responseData.results[0].unescapedUrl
+      robot.messageRoom 'non-tan', text + '\n' + img_url
+    )
+  )
 
 newPokemon = (msg, robot) ->
   
@@ -82,7 +99,7 @@ attackPokemon = (msg, robot) ->
   game = robot.brain.get key
   console.log(game)
   if !game.usersPokemon[msg.message.user.name]?
-    msg.send "ポケモンいないのにどうやって戦うん？「nontan phelp」コマンド見てや〜"
+    msg.send "ポケモンいないのにどうやって戦うん？「ポケモンヘルプ」コマンド見てや〜"
     return
 
   lastDateTime = parseInt(game.lastAttackDate)
@@ -101,16 +118,27 @@ attackPokemon = (msg, robot) ->
   damage = Math.floor(pokemon.atk * (80 + Math.random() * 30) / 100)
   damage = Math.min(damage, game.hp)
   game.hp -= damage
-  mes = "#{pokemon.name}の攻撃！#{game.enemy}に#{damage}ダメージ！\n 残りHP#{game.hp}/#{game.maxhp}\n"
+  mes = ">#{pokemon.name}の攻撃！#{game.enemy}に#{damage}ダメージ！\n >残りHP#{game.hp}/#{game.maxhp}\n"
   if game.lastAttacker == ""
-    mes += "最初の攻撃！ボーナスポイント！\n"
+    mes += ">最初の攻撃！ボーナスポイント！\n"
     damage += 30
 
   game.lastAttacker = msg.message.user.name
   game.lastAttackDate = new Date().getTime()
   if game.hp == 0
-    mes += "#{game.enemy}は倒れた！ボーナスポイント！\n"
+    mes += ">#{game.enemy}は倒れた！ボーナスポイント！\n"
     damage += 30
+
+  if !game.atk?
+    game.atk = Math.floor(100 * Math.random())
+    robot.brain.set key, game
+
+  if game.hp > 0
+    attack_rate = Math.floor(100 - Math.random() * game.atk)
+    if attack_rate > 70
+      enemy_atk = Math.floor(game.atk * (80 + Math.random() * 30) / 100)
+      mes += ">#{game.enemy}の反撃！#{enemy_atk}ダメージ！\n"
+      damage -= enemy_atk
   robot.brain.set key, game
   saveScore(msg, robot, damage)
 
@@ -139,11 +167,20 @@ showScore = (robot) ->
     txt += "#{k}: #{v}pt\n"
   return txt
 
+resetScore = (robot) ->
+  key = "PokemonBattleScore"
+  obj = {}
+  robot.brain.set key, {}
+
 module.exports = (robot) ->
   new cronJob('0 0 6 * * *', () ->
     if !existEnemy(robot)
       newGame(robot)
   ).start()
+
+  robot.respond /score reset/i, (msg) ->
+    if msg.message.user.name == "kamina"
+      resetScore(robot)
 
   # robot.hear /^はじめ/, (msg) ->
   #   newGame(robot)
@@ -160,7 +197,7 @@ module.exports = (robot) ->
     else
       msg.send "もう変えられないよ？"
 
-  robot.hear /^たたかう/i, (msg) ->
+  robot.hear /^たたか[う|え]/i, (msg) ->
     attackPokemon(msg, robot)
 
   robot.hear /^戦績$/i, (msg) ->

@@ -179,7 +179,7 @@ resetScore = (msg, robot) ->
   robot.brain.set key, scoreObj
 
 module.exports = (robot) ->
-  new cronJob('0 0 */3 * * *', () ->
+  new cronJob('0 0 */8 * * *', () ->
     # if !existEnemy(robot)
     newGame(robot)
   ).start()

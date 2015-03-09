@@ -12,7 +12,7 @@ request = require('request');
 cronJob = require('cron').CronJob
 
 sintyokuDodesuka = (robot) ->
-  blog = "http://shinchokudodesuka.tumblr.com/"
+  blog = "shinchokudodesuka.tumblr.com"
   tumblr.photos(blog).random (post) ->
     robot.messageRoom 'non-tan', post.photos[0].original_size.url
 
@@ -97,9 +97,13 @@ module.exports = (robot) ->
 
     msg.send "あなたの今日の運勢は「#{fortunes[rand]}」や♪ #{comment[rand]}"
 
-    new cronJob('0 59 23 * * *', () ->
-      sintyokuDodesuka(robot)
-    ).start()
+
+  new cronJob('0 59 23 * * *', () ->
+    sintyokuDodesuka(robot)
+  ).start()
+
+  robot.respond /進捗ありません/i, (msg) ->
+    sintyokuDodesuka(robot)
 
   # robot.hear /badger/i, (msg) ->
   #   msg.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"

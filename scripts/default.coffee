@@ -8,6 +8,14 @@
 #
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 tumblr = require "tumblrbot"
+request = require('request');
+cronJob = require('cron').CronJob
+
+sintyokuDodesuka = (robot) ->
+  blog = "http://shinchokudodesuka.tumblr.com/"
+  tumblr.photos(blog).random (post) ->
+    robot.messageRoom 'non-tan', post.photos[0].original_size.url
+
 SOURCES = {
   "kamina3.tumblr.com"
 }
@@ -89,6 +97,9 @@ module.exports = (robot) ->
 
     msg.send "あなたの今日の運勢は「#{fortunes[rand]}」や♪ #{comment[rand]}"
 
+    new cronJob('0 59 23 * * *', () ->
+      sintyokuDodesuka(robot)
+    ).start()
 
   # robot.hear /badger/i, (msg) ->
   #   msg.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
